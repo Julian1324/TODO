@@ -21,9 +21,8 @@ function AppUI() {
 
             <TodoList>
                 {error && <p>Hubo un error</p>}
-                {loading && (
-                    JSON.parse(localStorage.getItem('TODOS_V1')).map(todo => (<TodoLoading key={todo.text}/>))
-                )}
+
+                {loading && (<TodoLoading />)}
                 {(!loading && !searchedTodos.length) && <p>Crea tu primer TODO</p>}
 
                 {searchedTodos.map(todo => (

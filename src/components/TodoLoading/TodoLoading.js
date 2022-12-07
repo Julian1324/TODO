@@ -9,8 +9,24 @@ function TodoLoading() {
                     <div className="image"></div>
                 </div>
             </div>
+            <div className="background">
+                <div className="left">
+                    <div className="image"></div>
+                </div>
+            </div>
+            <div className="background">
+                <div className="left">
+                    <div className="image"></div>
+                </div>
+            </div>
+            <div className="background">
+                <div className="left">
+                    <div className="image"></div>
+                </div>
+            </div>
         </div>
     );
+
 }
 
 export { TodoLoading };
