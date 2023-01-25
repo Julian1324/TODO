@@ -10,39 +10,65 @@ import { CreateTodoButton } from "../components/CreateTodoButton/CreateTodoButto
 import { Modal } from '../Modal/Modal';
 import { TodoForm } from "../components/TodoForm/TodoForm";
 import { TodoLoading } from "../components/TodoLoading/TodoLoading";
+import { TodosError } from "../components/TodosError/TodosError";
+import { TodosEmpty } from "../components/TodosEmpty/TodosEmpty";
+import { EmptySearch } from '../components/EmptySearch/EmptySearch';
+import { ChangeAlertWithStorageListener } from "../components/ChangeAlert/changeAlert";
 
 function App() {
 
   const { error, loading, searchedTodos, completeTodo, deleteTodo, openModal, addTodo, setOpenModal, totalTodos, completedTodos, searchValue,
-    setSearchValue} = useTodos();
+    setSearchValue, sincronizeTodos } = useTodos();
 
   return (
     <React.Fragment>
-      <TodoHeader>
+      <TodoHeader loading={loading}>
         <TodoCounter totalTodos={totalTodos} completedTodos={completedTodos} />
         <TodoSearch searchValue={searchValue} setSearchValue={setSearchValue} />
       </TodoHeader>
 
-      <TodoList>
-        {error && <p>Hubo un error</p>}
+      <TodoList
+        error={error}
+        loading={loading}
+        searchedTodos={searchedTodos}
+        totalTodos={totalTodos}
+        searchText={searchValue}
+        onError={() => (<TodosError />)}
+        onLoading={() => <TodoLoading />}
+        onEmptyTodos={() => <TodosEmpty />}
+        onEmptySearch={() => <EmptySearch searchText={searchValue} />}
+        renderTodos={todo => <TodoItem key={todo.text} text={todo.text} completed={todo.completed} onComplete={() => completeTodo(todo.text)}
+          onDelete={() => deleteTodo(todo.text)} />}
+
+      >
+        {/* Render function: se llama con props.children y se ejecuta esta funcion */}
+        {/* {todo =>
+          <TodoItem key={todo.text} text={todo.text} completed={todo.completed} onComplete={() => completeTodo(todo.text)}
+            onDelete={() => deleteTodo(todo.text)} />} */}
+      </TodoList>
+
+      {/* <TodoList>
+        {error && <TodosError />}
 
         {loading && (<TodoLoading />)}
-        {(!loading && !searchedTodos.length) && <p>Crea tu primer TODO</p>}
+        {(!loading && !searchedTodos.length) && <TodosEmpty/>}
 
         {searchedTodos.map(todo => (
           <TodoItem key={todo.text} text={todo.text} completed={todo.completed} onComplete={() => completeTodo(todo.text)}
             onDelete={() => deleteTodo(todo.text)} />
 
         ))}
-      </TodoList>
+      </TodoList> */}
 
       {!!openModal && (
         <Modal>
-          <TodoForm addTodo={addTodo} setOpenModal={setOpenModal}/>
+          <TodoForm addTodo={addTodo} setOpenModal={setOpenModal} />
         </Modal>
       )}
 
       <CreateTodoButton setOpenModal={setOpenModal} />
+
+      <ChangeAlertWithStorageListener sincronize={sincronizeTodos}/>
     </React.Fragment>
   );
 }
